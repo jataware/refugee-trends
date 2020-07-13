@@ -2,12 +2,14 @@ import os
 from pytrends.request import TrendReq
 from google.cloud import translate_v2
 import pandas as pd
+import configparser
+from unhcr_refugee import get_refugee_data
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'world-modelers-268718-3c82e082c7de.json'
+config = configparser.ConfigParser()
+configFile = 'config.ini'
+config.read(configFile)
 
-df_refugee = pd.read_csv('EthiopiaArrivals.csv')
-df_refugee['date'] = pd.to_datetime(df_refugee['date'])
-df_refugee = df_refugee.set_index('date')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config['GOOGLE']['credentials']
 
 def translate(text, lang):
     client = translate_v2.Client(target_language=lang)
@@ -28,6 +30,9 @@ def get_corr(df_refugee, df_trend, term):
     print(f"{term} has a {corr} correlation with Ethiopian refugees.")
 
 if __name__ == "__main__":
+    print("Obtaining refugee data...")
+    df_refugee = get_refugee_data()    
+    
     print("\nThis application will translate a term of interest into a target language.\n"\
          "It will then check the correlation of the Google trend for that term (in the target language) against refugee arrivals in Ethiopia.")
     
