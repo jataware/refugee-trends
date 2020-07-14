@@ -4,6 +4,7 @@ from google.cloud import translate_v2
 import pandas as pd
 import configparser
 from unhcr_refugee import get_refugee_data
+from tabulate import tabulate
 
 config = configparser.ConfigParser()
 configFile = 'config.ini'
@@ -28,6 +29,7 @@ def get_corr(df_refugee, df_trend, term):
     combined = dfr_resample.join(gtrends_resample)
     corr = combined.corr()[term]['EthiopiaArrivals']
     print(f"{term} has a {corr} correlation with Ethiopian refugees.")
+    return (term, corr)
 
 if __name__ == "__main__":
     print("Obtaining refugee data...")
@@ -36,6 +38,7 @@ if __name__ == "__main__":
     print("\nThis application will translate a term of interest into a target language.\n"\
          "It will then check the correlation of the Google trend for that term (in the target language) against refugee arrivals in Ethiopia.")
     
+    correlations = []
     running = True
     while running:
         country_check = False   
@@ -88,8 +91,13 @@ if __name__ == "__main__":
                     trend_check = True
 
         corr = get_corr(df_refugee, df_trend, trend_term)
+        correlations.append([corr[0],geo, corr[1]])
 
         print("\nWould you like to try another term? Yes (y) or No (n)?")
         retry = input()
         if retry.lower() == 'n' or retry.lower() == 'no':
             running = False
+    
+    # print results            
+    df_corr = pd.DataFrame(correlations, columns=['Term','Country','Correlation'])
+    print(tabulate(df_corr, headers='keys', tablefmt='psql'))
