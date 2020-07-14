@@ -9,9 +9,17 @@ library(scales)
 options(scipen=999)
 
 ############################# Preprocessing  ############################# 
+args <- commandArgs(trailingOnly = TRUE)
+
+if (length(args)>0) {
+  fname = args[1]
+} else {
+  fname = "Migration_GTrends.csv"
+}
 
 #import data
-dat <- read.csv("Migration_GTrends.csv", header = TRUE, sep = ",", na.strings = "")
+cat("Reading in file: ", fname)
+dat <- read.csv(fname, header = TRUE, sep = ",", na.strings = "")
 
 #replace NA's 
 dat$EthiopiaArrivals <- ifelse(is.na(dat$EthiopiaArrivals), mean(dat$EthiopiaArrivals, na.rm=TRUE), dat$EthiopiaArrivals)
@@ -154,8 +162,11 @@ accuracy <- data.frame(Method = c("Baseline","Linear Regression","Full tree","Pr
 
 accuracy$RMSE <- round(accuracy$RMSE,2)
 accuracy$MAE <- round(accuracy$MAE,2) 
-accuracy
 
+cat("\n\n\nFile: ", fname)
+cat("\n########### RESULTS ###########\n")
+accuracy
+cat("###############################\n\n")
 
 
 all.predictions <- data.frame(actual = test$EthiopiaArrivals,
@@ -167,13 +178,13 @@ all.predictions <- data.frame(actual = test$EthiopiaArrivals,
                               svm = test.pred.svm)
 
 
-head(all.predictions) 
+# head(all.predictions) 
 
 
 library(tidyr)
 all.predictions <- gather(all.predictions,key = model,value = predictions, 2:7)
-head(all.predictions)
-tail (all.predictions)
+# head(all.predictions)
+# tail (all.predictions)
 
 ggplot(data = all.predictions,aes(x = actual, y = predictions)) + 
   geom_point(colour = "blue") + 

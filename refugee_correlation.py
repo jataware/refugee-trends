@@ -99,5 +99,5 @@ if __name__ == "__main__":
             running = False
     
     # print results            
-    df_corr = pd.DataFrame(correlations, columns=['Term','Country','Correlation'])
+    df_corr = pd.DataFrame(correlations, columns=['Term','Country','Correlation']).sort_values('Correlation', ascending=False)
     print(tabulate(df_corr, headers='keys', tablefmt='psql'))
