@@ -24,7 +24,7 @@ You will be asked to enter terms (which should be entered pre-translated). Leave
 
 ## Building the Model
 
-This requires you have R installed. You should run `Rscript ethiopia.R INPUT.csv` where `INPUT.csv` is the combined refugee/trend file you created in the prior step using `build_trends.py`.
+This requires you have R installed. You should run `Rscript model.R INPUT.csv` where `INPUT.csv` is the combined refugee/trend file you created in the prior step using `build_trends.py`.
 
 This executes the model developed in [Correlating Refugee Border Crossings with Internet Search Data](http://jultika.oulu.fi/files/nbnfi-fe201901222715.pdf) using your custom input. The output is a comparison of model accuracies. For example:
 
