@@ -167,7 +167,7 @@ cat("\n\n\nFile: ", fname)
 cat("\n########### RESULTS ###########\n")
 accuracy
 cat("###############################\n\n")
-
+write.csv(accuracy,'accuracy.csv')
 
 all.predictions <- data.frame(actual = test$EthiopiaArrivals,
                               baseline = best.guess,
@@ -176,7 +176,6 @@ all.predictions <- data.frame(actual = test$EthiopiaArrivals,
                               pruned.tree = test.pred.rtree.p,
                               random.forest = test.pred.forest,
                               svm = test.pred.svm)
-
 
 # head(all.predictions) 
 
