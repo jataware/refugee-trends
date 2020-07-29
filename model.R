@@ -17,6 +17,15 @@ if (length(args)>0) {
   fname = "Migration_GTrends.csv"
 }
 
+if (length(args)==2) {
+  train_test_split = as.numeric(args[2])
+} else {
+  train_test_split = 0.7
+}
+
+cat(train_test_split*100, "% of data will be used for training")
+
+
 #import data
 cat("Reading in file: ", fname)
 dat <- read.csv(fname, header = TRUE, sep = ",", na.strings = "")
@@ -53,7 +62,7 @@ data<- dat %>% dplyr::select(one_of(y.labels))
 
 #take a random sample of size 70% from a dataset dat 
 set.seed(123)
-index <- sample(1:nrow(data),size = 0.7*nrow(data))
+index <- sample(1:nrow(data),size = train_test_split*nrow(data))
 train <- data[index,]
 test <- data[-index,]
 nrow(train)
